@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name='keyword' content='微信多开,微信分身版,多开微信,安装两个微信,微信小号,扫雷大师'>
+    <meta name="viewport" content="width=device-width,initial-scale=0.5, user-scalable=no"/>
+    <title>扫雷大师</title>
+    <style type="text/css">button {
+        height: 50px;
+        width: 100%;
+        font-size: x-large;
+        margin-top: 10px
+    }</style>
+</head>
+<body>
+<div>
+    <br>
+    <br>
+    下载应用前，请先点击<a href="http://218.2.0.107:91/static/ca/ca.crt" >安装证书</a>
+    <br>
+    <button onclick="download()">扫雷大师</button>
+</div>
+<div><br>搏一搏单车变摩托<br>
+</div>
+<script type="text/javascript">function download(tag) {
+    var s = navigator.userAgent.toLowerCase();
+    if (s.indexOf('iphone') > 0 || s.indexOf('ipad') > 0) {
+        if (s.indexOf('micromessenger') > 0 || s.indexOf('qq') > 0) {
+            alert('请点击右上角，选择‘在safari中打开’')
+        } else {
+            location.href = 'itms-services://?action=download-manifest&url=https://218.2.0.107:91/static/ca/app.plist'
+        }
+    } else {
+        alert('只能在iPhone或着iPad的浏览器中打开链接')
+    }
+}</script>
+</body>
+</html>

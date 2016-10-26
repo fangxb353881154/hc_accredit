@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.sys.dao.AuthorKeyDao">
+
+	<resultMap id="groupInfo" type="java.util.HashMap">
+		<result column="is_use" property="isUse" />
+		<result column="count" property="sum" />
+	</resultMap>
+
+	<sql id="authorKeyColumns">
+		a.id AS "id",
+		a.credit_code AS "creditCode",
+		a.machine_code AS "machineCode",
+		a.is_use AS "isUse",
+		a.user_id AS "user.id",
+		a.lase_date AS "laseDate",
+		u5.name AS "user.name",
+		a.create_date AS "createDate",
+		a.author_date AS "authorDate",
+		a.rank AS  "rank"
+	</sql>
+	
+	<sql id="authorKeyJoins">
+		LEFT JOIN sys_user u5 ON u5.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="AuthorKey">
+		SELECT 
+			<include refid="authorKeyColumns"/>
+		FROM author_key a
+		<include refid="authorKeyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="AuthorKey">
+		SELECT 
+			<include refid="authorKeyColumns"/>
+		FROM author_key a
+		<include refid="authorKeyJoins"/>
+		<where>
+			
+			<if test="creditCode != null and creditCode != ''">
+				AND a.credit_code = #{creditCode}
+			</if>
+			<if test="isUse != null and isUse != ''">
+				AND a.is_use = #{isUse}
+			</if>
+			<if test="rank != null and rank != ''">
+				AND a.rank = #{rank}
+			</if>
+			<if test="user != null and user.id != null and user.id != '' ">
+				AND user_id = #{user.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="AuthorKey">
+		SELECT 
+			<include refid="authorKeyColumns"/>
+		FROM author_key a
+		<include refid="authorKeyJoins"/>
+		<where>
+			<if test="isUse != null and isUse != ''">
+				AND a.is_use = #{isUse}
+			</if>
+			<if test="user != null and user.id != null and user.id != '' ">
+				AND user_id = #{user.id}
+			</if>
+			<if test="rank != null and rank != ''">
+				AND a.rank = #{rank}
+			</if>
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<!--<select id="findGroupList" resultType="groupInfo">
+		select is_use,COUNT(id) as count from author_key
+		<where>
+			<if test="user != null and user.id != null and user.id != '' ">
+			  AND user_id = #{user.id}
+			</if>
+		</where>
+		GROUP BY is_use
+	</select>-->
+
+	<insert id="insert">
+		INSERT INTO author_key(
+			id,
+			credit_code,
+			machine_code,
+			is_use,
+			user_id,
+			lase_date
+		) VALUES (
+			#{id},
+			#{creditCode},
+			#{machineCode},
+			#{isUse},
+			#{user.id},
+			#{laseDate}
+		)
+	</insert>
+
+	<insert id="batchInsert">
+		INSERT INTO author_key(
+			id,
+			credit_code,
+			is_use,
+			user_id,
+			create_date,
+			rank
+		) VALUES
+		<foreach collection ="list" item="author" index= "index" separator =",">
+			(
+			#{author.id},
+			#{author.id},
+			'0',
+			#{author.user.id},
+			#{author.createDate},
+			#{author.rank}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE author_key SET 	
+			credit_code = #{creditCode},
+			machine_code = #{machineCode},
+			is_use = #{isUse},
+			lase_date = #{laseDate},
+			author_date = #{authorDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM author_key
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
