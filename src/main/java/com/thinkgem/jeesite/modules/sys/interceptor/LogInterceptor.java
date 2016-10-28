@@ -53,7 +53,7 @@ public class LogInterceptor extends BaseService implements HandlerInterceptor {
 				logger.debug("授权超时，关闭项目...");
 				Runtime run = Runtime.getRuntime();
 				try {
-					String path = "System.getProperty(\"user.dir\") + \"\\\\tomcat.bat\"";
+					String path = System.getProperty("user.dir") + "\\tomcat.bat";
 					logger.debug(path);
 					Process pro = run.exec(path);
 				} catch (IOException e) {
