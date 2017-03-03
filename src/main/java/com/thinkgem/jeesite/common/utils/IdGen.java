@@ -23,6 +23,11 @@ import org.springframework.stereotype.Service;
 public class IdGen implements IdGenerator, SessionIdGenerator {
 
 	private static SecureRandom random = new SecureRandom();
+
+	public static String STR_AF09 = "ABCDEF0123456789";
+
+	public static String STR_AZ09 = "ZXCVBNMASDFGHJKLQWERTYUIOP0123456789";
+
 	
 	/**
 	 * 封装JDK自带的UUID, 通过Random数字生成, 中间无-分割.
@@ -46,7 +51,24 @@ public class IdGen implements IdGenerator, SessionIdGenerator {
 		random.nextBytes(randomBytes);
 		return Encodes.encodeBase62(randomBytes);
 	}
-	
+
+
+	/**
+	 * 生成随机 编码
+	 * @param length
+	 * @param str
+	 * @return
+	 */
+	public static String uuid(int length, String str) {
+		int sl = str.length();
+		StringBuffer buff = new StringBuffer(length);
+		for (int i = 0; i < length;i++) {
+			int number = random.nextInt(sl);
+			buff.append(str.charAt(number));
+		}
+		return buff.toString();
+	}
+
 	/**
 	 * Activiti ID 生成
 	 */
@@ -61,11 +83,15 @@ public class IdGen implements IdGenerator, SessionIdGenerator {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(IdGen.uuid());
+		/*System.out.println(IdGen.uuid());
 		System.out.println(IdGen.uuid().length());
 		System.out.println(new IdGen().getNextId());
 		for (int i=0; i<1000; i++){
 			System.out.println(IdGen.randomLong() + "  " + IdGen.randomBase62(18));
+		}*/
+
+		for (int i = 0 ; i<10 ; i++) {
+			System.out.println(IdGen.uuid(14, IdGen.STR_AZ09));
 		}
 	}
 
